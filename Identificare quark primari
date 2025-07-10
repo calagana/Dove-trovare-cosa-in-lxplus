@@ -3,6 +3,7 @@ Il codice seguente è quello che uso per estrarre i due quark primari dal file d
 pquark.h ha le intestazioni per trovare i quark primari! 
 pquark.cpp invece ha il corpo delle funzioni per trovarle. Riporto solo questo qui. Restituisce un vettore di vettori, il primo indice dà l'evento, il secondo indice invece
 dà l'indice a cui trovare il quark primario nei dati. Daje questo lo abbiamo, il codice è:
+--------------------------------------------------------------------------------------------------------------------------
 
 #include "utils.h"
 #include <cmath>
@@ -70,8 +71,9 @@ std::vector<std::vector<int>> getPrimaryQuarkIndices(TTree* tree) {
 
 
 ------------------------------------------------------------------------------------------------------------------------------------------
-COME USARLO? RICHIEDE SOLTANTO IL TREE!! UN ESEMPIO DI CODICE PER APRIRLO è:
+COME USARLO? RICHIEDE SOLTANTO IL TREE!! SCRIVO UN CODICE IN CUI HAI TUTTO MESSO E HAI ANCHE I QUARK PRIMARI:
 ------------------------------------------------------------------------------------------------------------------------------------------
+
 #include "pquark.h"
 #include <TFile.h>
 #include <TTree.h>
@@ -92,14 +94,20 @@ int main() {
     cerr << "Albero 'hi' non trovato" << endl;
     return 1;
   }
+  vector<int>* pdgVec = nullptr;
+  vector<float>* ptVec = nullptr;
+  vector<float>* etaVec = nullptr;
+  vector<float>* phiVec = nullptr;
+  vector<vector<int>>* motherIdx = nullptr;
+
+  tree->SetBranchAddress("pdg", &pdgVec);
+  tree->SetBranchAddress("pt", &ptVec);
+  tree->SetBranchAddress("eta", &etaVec);
+  tree->SetBranchAddress("phi", &phiVec);
+  tree->SetBranchAddress("custom_motherIdx", &motherIdx);
+
 
   vector<vector<int>> quarkIndices = getPrimaryQuarkIndices(tree);
-  // Usa quarkIndices come preferisci 
-  for(int i = 0; i<quarkIndices.size(); i++) {
-    cout << "Numero di eventi sono: " <<  quarkIndices[i].size() << endl;
-  }
-
-
 
   return 0;
 }
